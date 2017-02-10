@@ -23,7 +23,7 @@ public class DesktopLauncher {
         config.width = GdxJubeat.VIEWPORT_WIDTH;
         config.height = GdxJubeat.VIEWPORT_HEIGHT;
         config.fullscreen = fullscreen;
-        new LwjglApplication(new GdxJubeat(), config);
+        new LwjglApplication(createApp(), config);
         return this;
     }
 
@@ -40,5 +40,9 @@ public class DesktopLauncher {
             }
         }
         return this;
+    }
+
+    protected GdxJubeat createApp() {
+        return new GdxJubeat();
     }
 }

@@ -29,27 +29,27 @@ public class L {
         if (l != null) l.invoke(arg1, arg2, arg3, arg4, arg5);
     }
 
-    interface Listener {
+    public interface Listener {
         void invoke();
     }
 
-    interface Listener1<A> {
+    public interface Listener1<A> {
         void invoke(A arg1);
     }
 
-    interface Listener2<A,B> {
+    public interface Listener2<A,B> {
         void invoke(A arg1, B arg2);
     }
 
-    interface Listener3<A,B,C> {
+    public interface Listener3<A,B,C> {
         void invoke(A arg1, B arg2, C arg3);
     }
 
-    interface Listener4<A,B,C,D> {
+    public interface Listener4<A,B,C,D> {
         void invoke(A arg1, B arg2, C arg3, D arg4);
     }
 
-    interface Listener5<A,B,C,D,E> {
+    public interface Listener5<A,B,C,D,E> {
         void invoke(A arg1, B arg2, C arg3, D arg4, E arg5);
     }
 
@@ -77,27 +77,27 @@ public class L {
         return (l != null) ? l.invoke(arg1, arg2, arg3, arg4, arg5) : null;
     }
 
-    interface Func<A> {
+    public interface Func<A> {
         A invoke();
     }
 
-    interface Func1<A,B> {
+    public interface Func1<A,B> {
         A invoke(B arg1);
     }
 
-    interface Func2<A,B,C> {
+    public interface Func2<A,B,C> {
         A invoke(B arg1, C arg2);
     }
 
-    interface Func3<A,B,C,D> {
+    public interface Func3<A,B,C,D> {
         A invoke(B arg1, C arg2, D arg3);
     }
 
-    interface Func4<A,B,C,D,E> {
+    public interface Func4<A,B,C,D,E> {
         A invoke(B arg1, C arg2, D arg3, E arg4);
     }
 
-    interface Func5<A,B,C,D,E,F> {
+    public interface Func5<A,B,C,D,E,F> {
         A invoke(B arg1, C arg2, D arg3, E arg4, F arg5);
     }
 }
