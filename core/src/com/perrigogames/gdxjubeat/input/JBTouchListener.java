@@ -20,11 +20,11 @@ public class JBTouchListener extends ClickListener {
 
     @Override
     public boolean touchDown(InputEvent event, float xA, float yA, int pointer, int button) {
-        return handler.touchDown(index, x, y);
+        return handler.onTouch(true, index, x, y);
     }
 
     @Override
     public void touchUp(InputEvent event, float xA, float yA, int pointer, int button) {
-        handler.touchUp(index, x, y);
+        handler.onTouch(false, index, x, y);
     }
 }

@@ -1,6 +1,7 @@
 package com.perrigogames.gdxjubeat;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -22,6 +23,8 @@ public class JubeatScreen extends Table implements JBInputHandler {
     private final Table[][] cellActors = new Table[GRID_WIDTH][GRID_HEIGHT];
     private final Table topPortion = new Table();
     private final Table cellTable = new Table();
+    private final Table contentTable = new Table();
+    private final Group animations = new Group();
     private final JubeatScreenConfig config;
 
     public static class JubeatScreenConfig {
@@ -49,24 +52,28 @@ public class JubeatScreen extends Table implements JBInputHandler {
 
     public void createLayout() {
         clear();
+        contentTable.clear();
+        animations.clear();
         cellTable.clear();
 
-        add(topPortion).expand().fill().row();
-        populateTopPortion(topPortion);
-        add(cellTable).expandX().pad(
+        stack(contentTable, animations).expand().fill();
+        animations.setTouchable(Touchable.disabled);
+        contentTable.add(topPortion).expand().fill().row();
+        contentTable.add(cellTable).expandX().pad(
                 config.borderThickness[0],
                 config.borderThickness[1],
                 config.borderThickness[2],
                 config.borderThickness[3]);
 
+        populateTopPortion(topPortion);
         cellTable.defaults().space(config.cellSpacing);
         int size = (int) (GdxJubeat.VIEWPORT_WIDTH
                         - config.borderThickness[1]
                         - config.borderThickness[3]
                         - ((GRID_WIDTH - 1) * config.cellSpacing))
                         / GRID_WIDTH;
-        for (int y = 0; y < GRID_WIDTH; y++) {
-            for (int x = 0; x < GRID_HEIGHT; x++) {
+        for (int y = 0; y < GRID_HEIGHT; y++) {
+            for (int x = 0; x < GRID_WIDTH; x++) {
                 final int xCell = x, yCell = y;
                 final int index = (y * GRID_WIDTH) + x;
                 if (cellActors[x][y] == null) {
@@ -102,16 +109,10 @@ public class JubeatScreen extends Table implements JBInputHandler {
         region.setBackground(A.d(A.black));
     }
 
-    public boolean touchDown(int index, int x, int y) {
+    @Override
+    public boolean onTouch(boolean down, int index, int x, int y) {
         for (JBInputHandler handler : inputHandlers) {
-            if (handler.touchDown(index, x, y)) return true;
-        }
-        return false;
-    }
-
-    public boolean touchUp(int index, int x, int y) {
-        for (JBInputHandler handler : inputHandlers) {
-            if (handler.touchUp(index, x, y)) return true;
+            if (handler.onTouch(down, index, x, y)) return true;
         }
         return false;
     }

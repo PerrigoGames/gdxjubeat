@@ -1,6 +1,6 @@
 package com.perrigogames.gdxjubeat.input;
 
-import com.perrigogames.gdxjubeat.util.Direction;
+import com.perrigogames.gdxjubeat.board.Direction;
 
 import static com.perrigogames.gdxjubeat.JubeatScreen.GRID_HEIGHT;
 import static com.perrigogames.gdxjubeat.JubeatScreen.GRID_WIDTH;
@@ -10,25 +10,6 @@ import static com.perrigogames.gdxjubeat.util.L.*;
  * an index into a direction, based on the relative location of the button pressed.
  * Created by corey on 2/9/17. */
 public abstract class DirectionalJBInputHandler implements JBInputHandler {
-
-    /** A version of {@link DirectionalJBInputHandler} that implements both abstract
-     * methods with bodies that simply return <code>true</code>. */
-    public static class DirectionalJBInputAdapter extends DirectionalJBInputHandler {
-
-        public DirectionalJBInputAdapter(DirectionalJBInput type) {
-            super(type);
-        }
-
-        @Override
-        public boolean directionDown(Direction direction) {
-            return true;
-        }
-
-        @Override
-        public boolean directionUp(Direction direction) {
-            return true;
-        }
-    }
 
     /** Shorthand for the format of function used in {@link DirectionalJBInput} */
     private interface JBDirectionFunc extends Func3<Direction, Integer, Integer, Integer> {}
@@ -80,16 +61,9 @@ public abstract class DirectionalJBInputHandler implements JBInputHandler {
     }
 
     @Override
-    public boolean touchDown(int index, int x, int y) {
-        return directionDown(type.directionForCell(index, x, y));
+    public boolean onTouch(boolean down, int index, int x, int y) {
+        return onDirection(down, type.directionForCell(index, x, y));
     }
 
-    @Override
-    public boolean touchUp(int index, int x, int y) {
-        return directionUp(type.directionForCell(index, x, y));
-    }
-
-    public abstract boolean directionDown(Direction direction);
-
-    public abstract boolean directionUp(Direction direction);
+    public abstract boolean onDirection(boolean down, Direction direction);
 }

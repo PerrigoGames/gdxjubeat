@@ -6,18 +6,11 @@ import com.perrigogames.gdxjubeat.JubeatScreen;
 public interface JBInputHandler {
 
     /** Handles the user touching down on a particular square.
+     * @param down whether the input was pressing the button down (as opposed to up)
      * @param index the index of the square being touched (0 is top left,
      *              moving horizontal)
      * @param x the horizontal index, 0 being left
      * @param y the vertical index, 0 being top
      * @return whether the input event was handled */
-    boolean touchDown(int index, int x, int y);
-
-    /** Handles the user touching up on a particular square.
-     * @param index the index of the square being touched (0 is top left,
-     *              moving horizontal)
-     * @param x the horizontal index, 0 being left
-     * @param y the vertical index, 0 being top
-     * @return whether the input event was handled */
-    boolean touchUp(int index, int x, int y);
+    boolean onTouch(boolean down, int index, int x, int y);
 }

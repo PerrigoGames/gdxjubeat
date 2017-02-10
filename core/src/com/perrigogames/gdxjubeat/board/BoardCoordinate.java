@@ -1,4 +1,4 @@
-package com.perrigogames.gdxjubeat.util;
+package com.perrigogames.gdxjubeat.board;
 
 /** Data class to contain information about a particular cell in the game board */
 public class BoardCoordinate {

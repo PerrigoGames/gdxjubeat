@@ -1,4 +1,4 @@
-package com.perrigogames.gdxjubeat.util;
+package com.perrigogames.gdxjubeat.board;
 
 /** Enum value to describe directions on a standard grid board.
  * Created by corey on 12/26/16. */

@@ -1,4 +1,4 @@
-package com.perrigogames.gdxjubeat.util;
+package com.perrigogames.gdxjubeat.input;
 
 import com.badlogic.gdx.InputProcessor;
 import com.perrigogames.gdxjubeat.util.Log;

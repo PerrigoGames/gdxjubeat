@@ -1,4 +1,4 @@
-package com.perrigogames.gdxjubeat.util;
+package com.perrigogames.gdxjubeat.board;
 
 /** Enum value to describe directions on a hexagonal grid board.
  * Created by corey on 1/3/17. */

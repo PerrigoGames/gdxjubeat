@@ -18,28 +18,27 @@ public class JBKeyboardListener extends InputListener {
 
     @Override
     public boolean keyDown(InputEvent event, int keycode) {
-        int index = keyIndex(keycode);
-        if (index != -1) {
-            handler.touchDown(index,
-                    index % JubeatScreen.GRID_WIDTH,
-                    index / JubeatScreen.GRID_WIDTH);
-        }
-        return super.keyDown(event, keycode);
+        boolean handled = handleKey(keyIndex(keycode), true);
+        return handled ? handled : super.keyDown(event, keycode);
     }
 
     @Override
     public boolean keyUp(InputEvent event, int keycode) {
-        int index = keyIndex(keycode);
+        boolean handled = handleKey(keyIndex(keycode), false);
+        return handled ? handled : super.keyUp(event, keycode);
+    }
+
+    private boolean handleKey(int index, boolean down) {
         if (index != -1) {
-            handler.touchUp(index,
+            return handler.onTouch(down, index,
                     index % JubeatScreen.GRID_WIDTH,
                     index / JubeatScreen.GRID_WIDTH);
         }
-        return super.keyUp(event, keycode);
+        return false;
     }
 
     private int keyIndex(int keycode) {
-        switch(keycode) {
+        switch(keycode) { //FIXME: this won't work on a different grid size
             case Input.Keys.NUM_1: return 0;
             case Input.Keys.NUM_2: return 1;
             case Input.Keys.NUM_3: return 2;

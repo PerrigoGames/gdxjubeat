@@ -2,10 +2,9 @@ package com.perrigogames.gdxjubeat.game.numbersllider;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.perrigogames.gdxjubeat.JubeatScreen;
+import com.perrigogames.gdxjubeat.board.Direction;
 import com.perrigogames.gdxjubeat.input.DirectionalJBInputHandler;
-import com.perrigogames.gdxjubeat.input.DirectionalJBInputHandler.DirectionalJBInputAdapter;
 import com.perrigogames.gdxjubeat.input.DirectionalJBInputHandler.DirectionalJBInput;
-import com.perrigogames.gdxjubeat.util.Direction;
 import com.perrigogames.gdxjubeat.util.Log;
 
 /**
@@ -18,10 +17,11 @@ public class NumberSlider extends JubeatScreen {
 
     public NumberSlider () {
         super();
-        this.inputHandlers.add(input = new DirectionalJBInputAdapter(DirectionalJBInput.FULL) {
+        this.inputHandlers.add(input = new DirectionalJBInputHandler(DirectionalJBInput.FULL) {
 
             @Override
-            public boolean directionDown(Direction direction) {
+            public boolean onDirection(boolean down, Direction direction) {
+                if (!down) return false;
                 handleDirection(direction);
                 return true;
             }
