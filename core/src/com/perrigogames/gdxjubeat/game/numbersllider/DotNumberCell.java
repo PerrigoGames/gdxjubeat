@@ -8,11 +8,11 @@ import com.perrigogames.gdxjubeat.assets.A;
 /**
  * Created by corey on 2/9/17.
  */
-public class NumberSliderCell extends Table {
+public class DotNumberCell extends Table {
 
     private Texture texture;
 
-    public NumberSliderCell() {
+    public DotNumberCell() {
         super();
         texture = A.tex(A.white);
         defaults().space(4);

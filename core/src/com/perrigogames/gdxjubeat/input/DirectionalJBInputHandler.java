@@ -4,7 +4,7 @@ import com.perrigogames.gdxjubeat.board.Direction;
 
 import static com.perrigogames.gdxjubeat.JubeatScreen.GRID_HEIGHT;
 import static com.perrigogames.gdxjubeat.JubeatScreen.GRID_WIDTH;
-import static com.perrigogames.gdxjubeat.util.L.*;
+import static com.perrigogames.gdxjubeat.util.L.Func3;
 
 /** A {@link JBInputHandler} that converts controller input from coordinates and
  * an index into a direction, based on the relative location of the button pressed.

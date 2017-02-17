@@ -2,7 +2,11 @@ package com.perrigogames.gdxjubeat.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.perrigogames.gdxjubeat.GdxJubeat;
+import com.perrigogames.gdxjubeat.JubeatScreen;
+import com.perrigogames.gdxjubeat.assets.A;
 import com.perrigogames.gdxjubeat.util.Log;
 
 /** Desktop launcher class for gdxjubeat
@@ -43,6 +47,18 @@ public class DesktopLauncher {
     }
 
     protected GdxJubeat createApp() {
-        return new GdxJubeat();
+        return new GdxJubeat() {
+
+            @Override
+            protected JubeatScreen createScreen() {
+                return new JubeatScreen() {
+
+                    @Override
+                    protected Actor createCell(int index, int x, int y) {
+                        return new Image(A.spr(A.white));
+                    }
+                };
+            }
+        };
     }
 }

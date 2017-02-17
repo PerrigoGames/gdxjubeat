@@ -2,7 +2,7 @@ package com.perrigogames.gdxjubeat.board;
 
 /** Enum value to describe directions on a hexagonal grid board.
  * Created by corey on 1/3/17. */
-public enum HexDirection {
+public enum HexDirection implements GenericDirection {
     NONE("", 0, 0, 0),
     UP("U", 0, 1, 1),
     LEFT_UP("LU", -1, 1, 0),
@@ -33,5 +33,19 @@ public enum HexDirection {
             translate(temp);
         }
         return temp;
+    }
+
+    @Override
+    public HexDirection opposite () {
+        switch(this) {
+            case NONE:       return NONE;
+            case UP:         return DOWN;
+            case LEFT_UP:    return RIGHT_DOWN;
+            case LEFT_DOWN:  return RIGHT_UP;
+            case DOWN:       return UP;
+            case RIGHT_DOWN: return LEFT_UP;
+            case RIGHT_UP:   return LEFT_DOWN;
+            default:         return NONE;
+        }
     }
 }

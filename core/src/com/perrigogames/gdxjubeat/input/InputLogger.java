@@ -3,9 +3,9 @@ package com.perrigogames.gdxjubeat.input;
 import com.badlogic.gdx.InputProcessor;
 import com.perrigogames.gdxjubeat.util.Log;
 
-/**
- * Created by corey on 2/3/17.
- */
+/** Implementation of {@link InputProcessor} that passes through input to another
+ * processor, logging input on an as-needed basis.
+ * Created by corey on 2/3/17. */
 public class InputLogger implements InputProcessor {
 
     public InputProcessor real;

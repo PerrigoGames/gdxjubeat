@@ -7,10 +7,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.perrigogames.gdxjubeat.assets.A;
-import com.perrigogames.gdxjubeat.input.JBKeyboardListener;
 import com.perrigogames.gdxjubeat.input.InputLogger;
+import com.perrigogames.gdxjubeat.input.JBKeyboardListener;
 
-public class GdxJubeat implements ApplicationListener {
+public abstract class GdxJubeat implements ApplicationListener {
 	Stage stage;
     JubeatScreen root;
     App app;
@@ -30,9 +30,7 @@ public class GdxJubeat implements ApplicationListener {
         root.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	}
 
-    protected JubeatScreen createScreen() {
-        return new JubeatScreen();
-    }
+    protected abstract JubeatScreen createScreen();
 
 	@Override
 	public void render () {
