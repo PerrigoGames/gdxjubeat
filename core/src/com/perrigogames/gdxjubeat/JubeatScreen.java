@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.perrigogames.gdxjubeat.assets.A;
 import com.perrigogames.gdxjubeat.board.BoardCoordinate;
+import com.perrigogames.gdxjubeat.game.numbersllider.TextNumberCell;
 import com.perrigogames.gdxjubeat.input.JBInputHandler;
 import com.perrigogames.gdxjubeat.input.JBTouchListener;
 import com.perrigogames.gdxjubeat.util.L;
@@ -33,10 +34,15 @@ public abstract class JubeatScreen<T extends Actor> extends Table implements JBI
     private final Group animations = new Group();
     private final JubeatScreenConfig config;
 
+    /** Shorthand for the {@link L.Func4} that's commonly passed to the
+     * board's cell iterator. */
+    public interface CellFunc extends L.Func4<Boolean, TextNumberCell, Integer, Integer, Integer>;
+
     public static class JubeatScreenConfig {
 
         public float[] borderThickness = new float[] { 32, 32, 32, 32 };
         public float cellSpacing = 16;
+        public int gridWidth = GRID_WIDTH, gridHeight = GRID_HEIGHT;
     }
 
     public JubeatScreen() {
@@ -45,7 +51,7 @@ public abstract class JubeatScreen<T extends Actor> extends Table implements JBI
 
     public JubeatScreen(JubeatScreenConfig config) {
         this.config = config;
-        for (int x = 0; x < GRID_WIDTH; x++) {
+        for (int x = 0; x < config.gridWidth; x++) {
             jbCells.add(new ArrayList<T>());
         }
         A.load(A.white, Texture.class);
@@ -70,6 +76,8 @@ public abstract class JubeatScreen<T extends Actor> extends Table implements JBI
         }));
     }
 
+    /** Invoked after the layout has been successfully created. Do size-dependent
+     * operations here. */
     public void onCreate() {}
 
     public void createLayout() {
@@ -92,15 +100,15 @@ public abstract class JubeatScreen<T extends Actor> extends Table implements JBI
         int size = (int) (GdxJubeat.VIEWPORT_WIDTH
                         - config.borderThickness[1]
                         - config.borderThickness[3]
-                        - ((GRID_WIDTH - 1) * config.cellSpacing))
-                        / GRID_WIDTH;
+                        - ((config.gridWidth - 1) * config.cellSpacing))
+                        / config.gridWidth;
         for (List l : jbCells) {
             l.clear();
         }
-        for (int y = 0; y < GRID_HEIGHT; y++) {
-            for (int x = 0; x < GRID_WIDTH; x++) {
+        for (int y = 0; y < config.gridHeight; y++) {
+            for (int x = 0; x < config.gridWidth; x++) {
                 final int xCell = x, yCell = y;
-                final int index = (y * GRID_WIDTH) + x;
+                final int index = (y * config.gridWidth) + x;
                 jbCells.get(x).add(createCell(index, x, y));
                 T curr = jbCells.get(x).get(y);
                 curr.setTouchable(Touchable.enabled);
@@ -112,47 +120,70 @@ public abstract class JubeatScreen<T extends Actor> extends Table implements JBI
         }
     }
 
+    /** Finds and returns the cell at the specified index */
     public T getCell(int index) {
         return getCell(coordFromIndex(index));
     }
 
+    /** Finds and returns the cell at the specified {@link BoardCoordinate} */
     public T getCell(BoardCoordinate coord) {
         return getCell(coord.x, coord.y);
     }
 
+    /** Finds and returns the cell at the specified x- and y-coordinates */
     public T getCell(int x, int y) {
         return jbCells.get(x).get(y);
     }
 
+    /** Converts an index value to its corresponding {@link BoardCoordinate}
+     * in the context of this board
+     * @return the converted {@link BoardCoordinate}, or null if the index
+     * doesn't properly refer to a cell */
     public BoardCoordinate coordFromIndex(int index) {
-        return temp.set(index % GRID_WIDTH, index / GRID_WIDTH);
+        if (!isValidIndex(index))
+            return null;
+        return temp.set(index % config.gridWidth, index / config.gridWidth);
     }
 
+    /** Converts a set of x- and y-coordinates into the index that represents
+     * it in the context of this board.
+     * @return the index of the supplied coordinates, or -1 if any of the
+     * supplied parameters are out of bounds for this board */
     public int indexFromCoord(int x, int y) {
-        if (x < 0 || x >= GRID_WIDTH || y < 0 || y >= GRID_HEIGHT)
+        if (x < 0 || x >= config.gridWidth || y < 0 || y >= config.gridHeight)
             return -1;
-        return x + (y * GRID_WIDTH);
+        return x + (y * config.gridWidth);
     }
 
+    /** Converts a {@link BoardCoordinate} into the index that represents
+     * it in the context of this board.
+     * @return the index of the supplied coordinates, or -1 if any of the
+     * supplied parameters are out of bounds for this board */
     public int indexFromCoord(BoardCoordinate coord) {
         return indexFromCoord(coord.x, coord.y);
     }
 
+    /** Calculates whether a particular index is valid in the context of
+     * this board */
     public boolean isValidIndex(int index) {
         return index >= 0 && index < size();
     }
 
+    /** Calculates whether a particular set of coordinates is valid in the
+     * context of this board */
     public boolean isValidCoordinate(int x, int y) {
         return isValidIndex(indexFromCoord(x, y));
     }
 
+    /** Calculates whether a particular set of coordinates is valid in the
+     * context of this board */
     public boolean isValidCoordinate(BoardCoordinate coord) {
         return isValidIndex(indexFromCoord(coord));
     }
 
     /** The number of indices this {@link JubeatScreen} can possibly address */
     public int size() {
-        return GRID_WIDTH * GRID_HEIGHT;
+        return config.gridWidth * config.gridHeight;
     }
 
     /** Creates a cell, to be implemented by subclasses. {@link JubeatScreen}
@@ -166,7 +197,10 @@ public abstract class JubeatScreen<T extends Actor> extends Table implements JBI
      * @param cell the cell that's being populated */
     protected void populateCell(T cell, int index, int x, int y) {}
 
-    protected void populateTopPortion(Table region) {}
+    /** Called after the top portion of the screen has been created and added to
+     * the group. Put code dependent on the actor being the right size in here.
+     * @param top the {@link Table} containing the top part of the screen */
+    protected void populateTopPortion(Table top) {}
 
     @Override
     public boolean onTouch(boolean down, int index, int x, int y) {
@@ -176,15 +210,26 @@ public abstract class JubeatScreen<T extends Actor> extends Table implements JBI
         return false;
     }
 
+    /** Shorthand for getting a {@link BoardCoordinate} from the app-wide pool.
+     * Remember to call {@link Pools#free(Object)} when done to return it to
+     * the pool. */
     protected BoardCoordinate poolCoord() {
         return Pools.obtain(BoardCoordinate.class);
     }
 
+    /** Shorthand for getting a {@link BoardCoordinate} from the app-wide pool,
+     * setting its coordinate values. at the same time. Remember to call
+     * {@link Pools#free(Object)} when done to return it to the pool. */
     protected BoardCoordinate poolCoord(int x, int y) {
         return poolCoord().set(x, y);
     }
 
-    public void forEachCell(L.Func4<Boolean, T, Integer, Integer, Integer> block) {
+    /** Shorthand function to iterate through all of the cells in the board.
+     * @param block Block function to execute on each cell. The board will pass
+     *              in (in order) the cell itself, the cell's index, and it's x-
+     *              and y- coordinates. The block will return whether the iterator
+     *              should continue to iterate or not. */
+    public void forEachCell(CellFunc block) {
         BoardCoordinate temp = poolCoord();
         for (int idx = 0; idx < size(); idx++) {
             temp.set(coordFromIndex(idx));

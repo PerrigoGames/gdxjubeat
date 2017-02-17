@@ -4,6 +4,9 @@ import com.perrigogames.gdxjubeat.JubeatScreen;
 import com.perrigogames.gdxjubeat.board.Direction;
 import com.perrigogames.gdxjubeat.input.DirectionalJBInputHandler;
 import com.perrigogames.gdxjubeat.input.DirectionalJBInputHandler.DirectionalJBInput;
+import com.perrigogames.gdxjubeat.util.L;
+
+import java.util.Random;
 
 /**
  * Created by corey on 2/8/17.
@@ -12,6 +15,7 @@ public class NumberSlider extends JubeatScreen<TextNumberCell> {
 
     private final TextNumberCell[][] numberCells;
     private final DirectionalJBInputHandler input;
+    private final Random rand = new Random();
 
     public NumberSlider () {
         super();
@@ -29,7 +33,14 @@ public class NumberSlider extends JubeatScreen<TextNumberCell> {
 
     public void handleDirection(Direction direction) {
         if (direction.cardinal()) {
+            forEachCell(new CellFunc() {
 
+                @Override
+                public Boolean invoke(TextNumberCell cell, Integer index, Integer x, Integer y) {
+                    
+                    return true;
+                }
+            });
         }
     }
 
@@ -41,5 +52,16 @@ public class NumberSlider extends JubeatScreen<TextNumberCell> {
     @Override
     protected void populateCell(TextNumberCell cell, int index, int x, int y) {
         getCell(x, y).setValue(index);
+    }
+
+    private void animateCell(int indexFrom, int indexTo) {
+        TextNumberCell from = getCell(indexFrom);
+        TextNumberCell to = getCell(indexTo);
+        to.setValue(from.getValue());
+        from.setValue(null);
+    }
+
+    private void spawnCell(Integer value) {
+        getCell(rand.nextInt(size())).setValue(value);
     }
 }
