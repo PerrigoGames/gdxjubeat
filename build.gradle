@@ -15,7 +15,7 @@ allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
 
-    version = '1.0'
+    version = '0.1-' + getDate()
     ext {
         appName = "gdx-jubeat"
         gdxVersion = '1.9.4'
@@ -35,8 +35,6 @@ allprojects {
 
 project(":desktop") {
     apply plugin: "java"
-
-
     dependencies {
         compile project(":core")
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
@@ -71,7 +69,6 @@ project(":ios") {
     apply plugin: "java"
     apply plugin: "robovm"
 
-
     dependencies {
         compile project(":core")
         compile "com.mobidevelop.robovm:robovm-rt:$roboVMVersion"
@@ -85,7 +82,6 @@ project(":ios") {
 project(":core") {
     apply plugin: "java"
 
-
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
@@ -94,4 +90,10 @@ project(":core") {
 
 tasks.eclipse.doLast {
     delete ".project"
+}
+
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmmss')
+    return formattedDate
 }

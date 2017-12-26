@@ -33,11 +33,11 @@ public class NumberSlider extends JubeatScreen<TextNumberCell> {
 
     public void handleDirection(Direction direction) {
         if (direction.cardinal()) {
-            forEachCell(new CellFunc() {
+            forEachCell(new L.Func4<Boolean, TextNumberCell, Integer, Integer, Integer>() {
 
                 @Override
                 public Boolean invoke(TextNumberCell cell, Integer index, Integer x, Integer y) {
-                    
+
                     return true;
                 }
             });

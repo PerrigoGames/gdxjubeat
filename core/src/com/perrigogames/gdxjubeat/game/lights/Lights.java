@@ -13,6 +13,7 @@ import com.perrigogames.gdxjubeat.board.BoardCoordinate;
 import com.perrigogames.gdxjubeat.input.JBInputHandler;
 import com.perrigogames.gdxjubeat.util.Boxed;
 import com.perrigogames.gdxjubeat.util.L;
+import com.perrigogames.gdxjubeat.util.Log;
 
 import java.util.Random;
 

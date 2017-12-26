@@ -47,18 +47,6 @@ public class DesktopLauncher {
     }
 
     protected GdxJubeat createApp() {
-        return new GdxJubeat() {
-
-            @Override
-            protected JubeatScreen createScreen() {
-                return new JubeatScreen() {
-
-                    @Override
-                    protected Actor createCell(int index, int x, int y) {
-                        return new Image(A.spr(A.white));
-                    }
-                };
-            }
-        };
+        return new GdxJubeat.GdxJubeatAdapter();
     }
 }

@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.perrigogames.gdxjubeat.assets.A;
 import com.perrigogames.gdxjubeat.board.BoardCoordinate;
-import com.perrigogames.gdxjubeat.game.numbersllider.TextNumberCell;
 import com.perrigogames.gdxjubeat.input.JBInputHandler;
 import com.perrigogames.gdxjubeat.input.JBTouchListener;
 import com.perrigogames.gdxjubeat.util.L;
@@ -34,9 +33,13 @@ public abstract class JubeatScreen<T extends Actor> extends Table implements JBI
     private final Group animations = new Group();
     private final JubeatScreenConfig config;
 
-    /** Shorthand for the {@link L.Func4} that's commonly passed to the
-     * board's cell iterator. */
-    public interface CellFunc extends L.Func4<Boolean, TextNumberCell, Integer, Integer, Integer>;
+    public static class JubeatScreenAdapter extends JubeatScreen<Table> {
+
+        @Override
+        protected Table createCell(int index, int x, int y) {
+            return new Table();
+        }
+    }
 
     public static class JubeatScreenConfig {
 
@@ -229,7 +232,7 @@ public abstract class JubeatScreen<T extends Actor> extends Table implements JBI
      *              in (in order) the cell itself, the cell's index, and it's x-
      *              and y- coordinates. The block will return whether the iterator
      *              should continue to iterate or not. */
-    public void forEachCell(CellFunc block) {
+    public void forEachCell(L.Func4<Boolean, T, Integer, Integer, Integer> block) {
         BoardCoordinate temp = poolCoord();
         for (int idx = 0; idx < size(); idx++) {
             temp.set(coordFromIndex(idx));

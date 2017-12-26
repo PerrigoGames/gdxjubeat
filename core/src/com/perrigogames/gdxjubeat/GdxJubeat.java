@@ -18,6 +18,14 @@ public abstract class GdxJubeat implements ApplicationListener {
     public static final int VIEWPORT_WIDTH = 360;
     public static final int VIEWPORT_HEIGHT = 640;
 
+    public static class GdxJubeatAdapter extends GdxJubeat {
+
+        @Override
+        protected JubeatScreen createScreen() {
+            return new JubeatScreen.JubeatScreenAdapter();
+        }
+    }
+
 	@Override
 	public void create () {
         app = new App();
